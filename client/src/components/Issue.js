@@ -41,21 +41,21 @@ class Issue extends Component {
             <Paper className="issue">
             <p className="issue_title" cols="10">
                 <b><span className='issue-preview'>
-                    {title.length > 25 ? `${title.substr(0, 25)}...` :title}
+                    {title && title.length > 25 ? `${title.substr(0, 25)}...` :title}
                 </span></b>
             </p>
             <Divider light />
                 <p className="issue_description">
                     <span className='issue-preview'>
-                        {description.length > 25 ? `${description.substr(0, 300)}...` : description}
+                        {description && description.length > 300 ? `${description.substr(0, 300)}...` : description}
                     </span>
                 </p>
                 <p className="issue_datestamp"><b>{moment(updatedAt).fromNow()}</b></p>                
                     <div className="issue_button">
                         <Row className="issue_row">
-                            <Link to={`/issue/${id}`} className="btn btn-primary"> Show </Link>
-                            <Link to={`/edit/${id}`} className="btn btn-warning"> Edit </Link>
-                            <Link onClick={this.confirmDeletion} className="btn btn-danger">Delete</Link>
+                            <Link to={`/issue/${id}`} className="btn btn-primary col-md-3"> Show </Link>
+                            <Link to={`/edit/${id}`} className="btn btn-warning col-md-3"> Edit </Link>
+                            <Link onClick={this.confirmDeletion} className="btn btn-danger col-md-3">Delete</Link>
                         </Row>
                     </div>                   
             </Paper>
