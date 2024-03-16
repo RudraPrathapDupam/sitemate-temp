@@ -1,0 +1,48 @@
+.issue{
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+ 
+	float: left;
+	margin-right: 10px;
+	width: 250px;
+	height: 450px;
+	margin-top: 50px; 
+ 
+ 
+}
+ul li{
+  list-style-type: none;
+  display: inline;
+ 
+ 
+}
+ 
+.issue_title{	
+	font-size: 1em;
+	margin-top: 10px;
+	text-align: center;
+}
+.issue_button{
+	position: relative;
+	display: inline-block;
+ 
+}
+.buttons {
+	position: absolute;
+	bottom: 0;
+ 
+}
+.issue_description{
+	margin: 10px;
+	white-space: pre-wrap;
+	text-align: left;
+}
+.issue_list 
+{
+  	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+ 
+}
+.issue_datestamp{
+	text-align: center;
+}

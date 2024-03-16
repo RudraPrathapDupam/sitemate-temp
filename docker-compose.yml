@@ -1,0 +1,88 @@
+version: '3.8'
+
+# alternative 1 - inject separate env files into containers
+# env_file:
+#   - ./client/.env
+# env_file:
+#   - ./server/.env
+# 
+# alternative 2 - put all vars into single .env and forward vars through docker-compose.yml
+# environment: ...
+
+services:
+  client:
+    container_name: client
+    restart: unless-stopped
+    image: issues-client:latest
+    build:
+      # src must be in context
+      context: ./client
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - server
+    networks:
+      - internal-client
+    environment:
+      - NODE_ENV=production
+      # forwarded
+      - REACT_APP_BASE_URL
+    # env_file:
+    #   - ./client/.env
+    
+    # nginx ports
+    # either open port or route through traefik
+    ports:
+    - '3080:80'
+    # - '3443:443' # must edit nginx.conf
+
+  server:
+    container_name: server
+    restart: unless-stopped
+    image: issues-server:latest
+    build:
+      context: ./server
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=production
+      # # forwarded
+      # - MONGO_URI_PROD
+      # - CLIENT_URL_PROD
+      # - SERVER_URL_PROD
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server/public/images:/home/node/app/server/public/images
+    networks:
+      - default
+      - internal-client
+
+    ports:
+      - '8001:5000'
+      - '8000:80'
+      
+    
+  mongo:
+    image: mongo:6.0.3
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - '27017'
+    # environment:
+      # forwarded
+    # - MONGO_INITDB_DATABASE
+    # - MONGO_INITDB_ROOT_USERNAME
+    # - MONGO_INITDB_ROOT_PASSWORD
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server/docker/mongo-data:/data/db
+    networks:
+      - default
+
+networks:
+  default:
+    name: issues-default
+  internal-client:
+    name: client
